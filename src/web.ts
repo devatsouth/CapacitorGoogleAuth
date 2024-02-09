@@ -1,5 +1,5 @@
 import { WebPlugin } from '@capacitor/core';
-import { GoogleAuthPlugin, InitOptions, User } from './definitions';
+import { GoogleAuthPlugin, InitOptions, SignInOptions, User } from './definitions';
 
 export class GoogleAuthWeb extends WebPlugin implements GoogleAuthPlugin {
   gapiLoaded: Promise<void>;
@@ -84,9 +84,17 @@ export class GoogleAuthWeb extends WebPlugin implements GoogleAuthPlugin {
     });
   }
 
-  async signIn() {
+  async signIn(
+    _options: Partial<SignInOptions> = {
+      clientId: '',
+      scopes: [],
+      grantOfflineAccess: false,
+    }
+  ) {
     return new Promise<User>(async (resolve, reject) => {
       try {
+        await this.initialize(_options);
+
         let serverAuthCode: string;
         const needsOfflineAccess = this.options.grantOfflineAccess ?? false;
 
@@ -108,6 +116,8 @@ export class GoogleAuthWeb extends WebPlugin implements GoogleAuthPlugin {
         user.serverAuthCode = serverAuthCode;
         resolve(user);
       } catch (error) {
+        console.log("Something went wrong on plugin")
+        console.error(error);
         reject(error);
       }
     });

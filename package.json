@@ -1,6 +1,6 @@
 {
-  "name": "@codetrix-studio/capacitor-google-auth",
-  "version": "3.3.6",
+  "name": "@southdevs/capacitor-google-auth",
+  "version": "3.3.6-1",
   "description": "Google Auth plugin for capacitor.",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -11,9 +11,10 @@
     "prepublishOnly": "npm run build",
     "prepare": "tsc",
     "test": "echo \"no test specified\"",
-    "docgen": "docgen --api GoogleAuthPlugin --output-readme README.md"
+    "docgen": "docgen --api GoogleAuthPlugin --output-readme README.md",
+    "deploy": "npm run build && npm publish --access=public"
   },
-  "author": "CodetrixStudio",
+  "author": "SouthDevs",
   "license": "MIT",
   "devDependencies": {
     "@capacitor/android": "^5.0.4",
@@ -36,7 +37,7 @@
     "android/",
     "!android/src/androidTest",
     "!android/src/test",
-    "CodetrixStudioCapacitorGoogleAuth.podspec"
+    "SouthDevsCapacitorGoogleAuth.podspec"
   ],
   "keywords": [
     "capacitor",
@@ -60,10 +61,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/CodetrixStudio/CapacitorGoogleAuth"
+    "url": "https://github.com/devatsouth/CapacitorGoogleAuth"
   },
   "bugs": {
-    "url": "https://github.com/CodetrixStudio/CapacitorGoogleAuth/issues"
+    "url": "https://github.com/devatsouth/CapacitorGoogleAuth/issues"
   },
   "prettier": "@ionic/prettier-config"
 }

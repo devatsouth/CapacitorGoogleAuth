@@ -137,6 +137,34 @@ export interface InitOptions {
   grantOfflineAccess?: boolean;
 }
 
+export interface SignInOptions {
+  /**
+   * The app's client ID, found and created in the Google Developers Console.
+   * Common for Android or iOS.
+   * The default is defined in the configuration.
+   * @example xxxxxx-xxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
+   * @since 3.1.0
+   */
+  clientId?: string;
+
+  /**
+   * Specifies the scopes required for accessing Google APIs
+   * The default is defined in the configuration.
+   * @example ["profile", "email"]
+   * @see [Google OAuth2 Scopes](https://developers.google.com/identity/protocols/oauth2/scopes)
+   */
+  scopes: string[];
+
+  /**
+   * Set if your application needs to refresh access tokens when the user is not present at the browser.
+   * In response use `serverAuthCode` key
+   *
+   * @default false
+   * @since 3.1.0
+   * */
+  grantOfflineAccess?: boolean;
+}
+
 export interface GoogleAuthPlugin {
   /**
    * Initializes the GoogleAuthPlugin, loading the gapi library and setting up the plugin.
@@ -148,7 +176,7 @@ export interface GoogleAuthPlugin {
   /**
    * Initiates the sign-in process and returns a Promise that resolves with the user information.
    */
-  signIn(): Promise<User>;
+  signIn(options: SignInOptions): Promise<User>;
 
   /**
    * Refreshes the authentication token and returns a Promise that resolves with the updated authentication details.

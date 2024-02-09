@@ -61,8 +61,17 @@ public class GoogleAuth: CAPPlugin {
                 }
             } else {
                 let presentingVc = self.bridge!.viewController!;
-                
-                self.googleSignIn.signIn(with: self.googleSignInConfiguration, presenting: presentingVc, hint: nil, additionalScopes: self.additionalScopes) { user, error in
+                guard let additionalScopes = call.getArray("scopes", String.self) else {
+                    call.reject("Must provide scopes");
+                    return;
+                }
+                guard let clientId = self.getClientIdValue() else {
+                    NSLog("no client id found in config")
+                    return;
+                }
+                let serverClientId = self.getServerClientIdValue();
+                let googleSignInConfiguration = GIDConfiguration.init(clientID: clientId, serverClientID: serverClientId)
+                self.googleSignIn.signIn(with: googleSignInConfiguration, presenting: presentingVc, hint: nil, additionalScopes: additionalScopes) { user, error in
                     if let error = error {
                         self.signInCall?.reject(error.localizedDescription, "\(error._code)");
                         return;
