@@ -139,7 +139,6 @@ export class GoogleAuthWeb extends WebPlugin implements GoogleAuthPlugin {
   }
 
   async refresh() {
-    await this.ensureInitialize({/** */});
     const authResponse = await gapi.auth2.getAuthInstance().currentUser.get().reloadAuthResponse();
     return {
       accessToken: authResponse.access_token,
