@@ -113,11 +113,13 @@ export class GoogleAuthWeb extends WebPlugin implements GoogleAuthPlugin {
         let serverAuthCode: string;
         const needsOfflineAccess = this.options.grantOfflineAccess ?? false;
 
+        const scopes = _options.scopes ?? [];
+        const scope = scopes.join(" ");
         if (needsOfflineAccess) {
-          const offlineAccessResponse = await gapi.auth2.getAuthInstance().grantOfflineAccess();
+          const offlineAccessResponse = await gapi.auth2.getAuthInstance().grantOfflineAccess({scope});
           serverAuthCode = offlineAccessResponse.code;
         } else {
-          await gapi.auth2.getAuthInstance().signIn();
+          await gapi.auth2.getAuthInstance().signIn({scope});
         }
 
         const googleUser = gapi.auth2.getAuthInstance().currentUser.get();
