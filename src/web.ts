@@ -4,6 +4,7 @@ import { GoogleAuthPlugin, InitOptions, SignInOptions, User } from './definition
 export class GoogleAuthWeb extends WebPlugin implements GoogleAuthPlugin {
   gapiLoaded: Promise<void>;
   options: InitOptions;
+  isGapiLoaded = false;
 
   constructor() {
     super();
@@ -31,6 +32,20 @@ export class GoogleAuthWeb extends WebPlugin implements GoogleAuthPlugin {
     script.onload = this.platformJsLoaded.bind(this);
     script.src = 'https://apis.google.com/js/platform.js';
     head.appendChild(script);
+  }
+
+  async ensureInitialize(
+    _options: Partial<InitOptions> = {
+      clientId: '',
+      scopes: [],
+      grantOfflineAccess: false,
+    }
+  ) {
+    if (this.isGapiLoaded) {
+      return;
+    }
+    await this.initialize(_options);
+    this.isGapiLoaded = true;
   }
 
   initialize(
@@ -93,7 +108,7 @@ export class GoogleAuthWeb extends WebPlugin implements GoogleAuthPlugin {
   ) {
     return new Promise<User>(async (resolve, reject) => {
       try {
-        await this.initialize(_options);
+        await this.ensureInitialize(_options);
 
         let serverAuthCode: string;
         const needsOfflineAccess = this.options.grantOfflineAccess ?? false;
@@ -116,14 +131,13 @@ export class GoogleAuthWeb extends WebPlugin implements GoogleAuthPlugin {
         user.serverAuthCode = serverAuthCode;
         resolve(user);
       } catch (error) {
-        console.log("Something went wrong on plugin")
-        console.error(error);
         reject(error);
       }
     });
   }
 
   async refresh() {
+    await this.ensureInitialize({/** */});
     const authResponse = await gapi.auth2.getAuthInstance().currentUser.get().reloadAuthResponse();
     return {
       accessToken: authResponse.access_token,
@@ -133,7 +147,8 @@ export class GoogleAuthWeb extends WebPlugin implements GoogleAuthPlugin {
   }
 
   async signOut() {
-    return gapi.auth2.getAuthInstance().signOut();
+    const signOutResult = await gapi.auth2.getAuthInstance().signOut();
+    return signOutResult;
   }
 
   private async addUserChangeListener() {
