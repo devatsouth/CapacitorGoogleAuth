@@ -138,6 +138,7 @@ export interface InitOptions {
 }
 
 export interface SignInOptions {
+  serverClientId?: string;
   /**
    * The app's client ID, found and created in the Google Developers Console.
    * Common for Android or iOS.

@@ -69,7 +69,10 @@ public class GoogleAuth: CAPPlugin {
                     NSLog("no client id found in config")
                     return;
                 }
-                let serverClientId = self.getServerClientIdValue();
+                guard let serverClientId = call.getString("serverClientId") else {
+                    NSLog("no server client id found in config")
+                    return;
+                }
                 let googleSignInConfiguration = GIDConfiguration.init(clientID: clientId, serverClientID: serverClientId)
                 self.googleSignIn.signIn(with: googleSignInConfiguration, presenting: presentingVc, hint: nil, additionalScopes: additionalScopes) { user, error in
                     if let error = error {
