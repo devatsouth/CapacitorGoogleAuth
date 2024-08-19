@@ -1,5 +1,5 @@
 {
-  "name": "@codetrix-studio/capacitor-google-auth",
+  "name": "@southdevs/capacitor-google-auth",
   "version": "3.4.0-rc.4",
   "description": "Google Auth plugin for capacitor.",
   "main": "dist/esm/index.js",
